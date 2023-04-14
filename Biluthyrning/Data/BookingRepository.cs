@@ -1,72 +1,55 @@
 ﻿using Biluthyrning.Models;
 using Microsoft.EntityFrameworkCore;
+using System.Text.Json;
+using static System.Net.WebRequestMethods;
 
 namespace Biluthyrning.Data
 {
-	public class BookingRepository : IBooking
-	{
-		private readonly ApplicationDbContext applicationDbContext;
+    public class BookingRepository : IBooking
+    {
+        private readonly HttpClient client;
 
-		public BookingRepository(ApplicationDbContext applicationDbContext)
-		{
-			this.applicationDbContext = applicationDbContext;
-		}
-		public async Task<Booking> CreateAsync(Booking booking)
-		{
-			applicationDbContext.Bookings.Add(booking);
-			await applicationDbContext.SaveChangesAsync();
-			return booking;
-		}
+        public BookingRepository(HttpClient client)
+        {
+            this.client = client;
+        }
+        public async Task<Booking> CreateAsync(Booking booking)
+        {
+            await client.PostAsJsonAsync($"api/Bookings", booking);
+            return booking;
+        }
 
-		public async Task DeleteAsync(int id)
-		{
-			var booking = applicationDbContext.Bookings.Find(id);
-			applicationDbContext.Remove(booking);
-			await applicationDbContext.SaveChangesAsync();
-		}
-
-		public async Task<IEnumerable<Booking>> GetAllAsync()
-		{
-			return await applicationDbContext.Bookings.OrderBy(x => x.Id).ToListAsync();
+        public async Task DeleteAsync(int id)
+        {
+            await client.DeleteAsync($"api/Bookings/{id}");
+        }
+        public async Task<IEnumerable<Booking>> GetAllAsync()
+        {
+            return await client.GetFromJsonAsync<IEnumerable<Booking>>("api/Bookings");
         }
         public async Task<IEnumerable<Booking>> GetByIdDeleteAsync(int id)
         {
-            return await applicationDbContext.Bookings.Where(x => x.Id == id).ToListAsync();
-
+            return await client.GetFromJsonAsync<IEnumerable<Booking>>($"api/Bookings/{id}");
         }
 
-        public async Task<Booking> GetByCarIdAsync(int id)
+        public async Task<Booking> GetByCarIdAsync(int carId)
         {
-            return await applicationDbContext.Bookings.FirstOrDefaultAsync(x => x.CarId == id);
-
+            return await client.GetFromJsonAsync<Booking>($"api/Bookings/Cars/{carId}");
         }
 
         public async Task<Booking> GetByIdAsync(int id)
-		{
-			return await applicationDbContext.Bookings.FirstOrDefaultAsync(x => x.Id == id);
-
-		}
-		public async Task<IEnumerable<Booking>> GetByUserIdAsync(int id)
         {
-            return await applicationDbContext.Bookings.Where(x => x.UserId == id).ToListAsync();
+            return await client.GetFromJsonAsync<Booking>($"api/Bookings/{id}");
+        }
+        public async Task<IEnumerable<Booking>> GetByUserIdAsync(int userId)
+        {
+            return await client.GetFromJsonAsync<IEnumerable<Booking>>($"api/Bookings/Users/{userId}");
         }
 
         public async Task<Booking> UpdateAsync(Booking booking)
-		{
-			applicationDbContext.Update(booking);
-			await applicationDbContext.SaveChangesAsync();
-			return booking;
-		}
-
-        public async Task<Booking> AddAsync(Booking booking)
-		{
-			applicationDbContext.Add(booking);	
-			await applicationDbContext.SaveChangesAsync();
-			return booking;
-		}
-        public async Task SaveChangesAsync()
-		{
-			applicationDbContext.SaveChanges();
-		}
+        {
+            await client.PutAsJsonAsync($"api/Bookings/{booking.Id}", booking);
+            return booking;
+        }
     }
 }

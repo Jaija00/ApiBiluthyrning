@@ -13,11 +13,11 @@ namespace BiluthyrningApi.Controllers
 		private readonly IBooking bookingRepository;
 
 		public BookingsController(IBooking bookingRepository)
-        {
+		{
 			this.bookingRepository = bookingRepository;
 		}
-        // GET: api/<BookingsController>
-        [HttpGet]
+		// GET: api/<BookingsController>
+		[HttpGet]
 		public async Task<IEnumerable<Booking>> Get()
 		{
 			return await bookingRepository.GetAllAsync();
@@ -30,9 +30,21 @@ namespace BiluthyrningApi.Controllers
 			return await bookingRepository.GetByIdAsync(id);
 		}
 
-		// POST api/<BookingsController>
-		[HttpPost]
-		public async void Post([FromBody] Booking booking)
+		[HttpGet("Cars/{carId}")]
+		public async Task<Booking> GetByCar(int carId)
+		{
+			return await bookingRepository.GetByCarIdAsync(carId);
+		}
+
+        [HttpGet("Users/{userId}")]
+        public async Task<IEnumerable<Booking>> GetByUser(int userId)
+        {
+            return await bookingRepository.GetByUserIdAsync(userId);
+        }
+
+        // POST api/<BookingsController>
+        [HttpPost]
+		public async Task Post([FromBody] Booking booking)
 		{
 			await bookingRepository.CreateAsync(booking);
 			return;
@@ -40,7 +52,7 @@ namespace BiluthyrningApi.Controllers
 
 		// PUT api/<BookingsController>/5
 		[HttpPut("{id}")]
-		public async void Put(int id, [FromBody] Booking booking)
+		public async Task Put(int id, [FromBody] Booking booking)
 		{
 			booking.Id = id;
 			await bookingRepository.UpdateAsync(booking);
@@ -49,7 +61,7 @@ namespace BiluthyrningApi.Controllers
 
 		// DELETE api/<BookingsController>/5
 		[HttpDelete("{id}")]
-		public async void Delete(int id)
+		public async Task Delete(int id)
 		{
 			await bookingRepository.DeleteAsync(id);
 			return;

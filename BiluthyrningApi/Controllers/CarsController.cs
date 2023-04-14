@@ -31,7 +31,7 @@ namespace BiluthyrningApi.Controllers
 
 		// POST api/<CarsController>
 		[HttpPost]
-		public async void Post([FromBody] Car car)
+		public async Task Post([FromBody] Car car)
 		{
 			await carRepository.CreateAsync(car);
 			return;
@@ -39,7 +39,7 @@ namespace BiluthyrningApi.Controllers
 
 		// PUT api/<CarsController>/5
 		[HttpPut("{id}")]
-		public async void Put(int id, [FromBody] Car car)
+		public async Task Put(int id, [FromBody] Car car)
 		{
 			car.CarId = id;
 			await carRepository.UpdateAsync(car);
@@ -48,7 +48,7 @@ namespace BiluthyrningApi.Controllers
 
 		// DELETE api/<CarsController>/5
 		[HttpDelete("{id}")]
-		public async void Delete(int id)
+		public async Task Delete(int id)
 		{
 			await carRepository.DeleteAsync(id);
 			return;

@@ -32,7 +32,7 @@ namespace BiluthyrningApi.Controllers
 
 		// POST api/<UsersController>
 		[HttpPost]
-		public async void Post([FromBody] User user)
+		public async Task Post([FromBody] User user)
 		{
 			await userRepository.CreateAsync(user);
 			return;
@@ -40,7 +40,7 @@ namespace BiluthyrningApi.Controllers
 
 		// PUT api/<UsersController>/5
 		[HttpPut("{id}")]
-		public async void Put(int id, [FromBody] User user)
+		public async Task Put(int id, [FromBody] User user)
 		{
 			user.UserId = id;
 			await userRepository.UpdateAsync(user);
@@ -49,7 +49,7 @@ namespace BiluthyrningApi.Controllers
 
 		// DELETE api/<UsersController>/5
 		[HttpDelete("{id}")]
-		public async void Delete(int id)
+		public async Task Delete(int id)
 		{
 			await userRepository.DeleteAsync(id);
 			return;

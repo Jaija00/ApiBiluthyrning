@@ -121,6 +121,48 @@ namespace BiluthyrningApi.Migrations
 
                     b.ToTable("Users");
                 });
+
+            modelBuilder.Entity("BiluthyrningApi.ViewModels.AvailableCarsViewModel", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("BookingId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("CarId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("BookingId");
+
+                    b.HasIndex("CarId");
+
+                    b.ToTable("AvailableCarsViewModel");
+                });
+
+            modelBuilder.Entity("BiluthyrningApi.ViewModels.AvailableCarsViewModel", b =>
+                {
+                    b.HasOne("BiluthyrningApi.Models.Booking", "Booking")
+                        .WithMany()
+                        .HasForeignKey("BookingId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("BiluthyrningApi.Models.Car", "Car")
+                        .WithMany()
+                        .HasForeignKey("CarId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Booking");
+
+                    b.Navigation("Car");
+                });
 #pragma warning restore 612, 618
         }
     }

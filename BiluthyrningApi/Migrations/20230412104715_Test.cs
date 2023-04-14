@@ -2,16 +2,16 @@
 
 #nullable disable
 
-namespace Biluthyrning.Migrations
+namespace BiluthyrningApi.Migrations
 {
     /// <inheritdoc />
-    public partial class hello : Migration
+    public partial class Test : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.CreateTable(
-                name: "AvailableCarsViewModel",
+                name: "AvailableCars",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
@@ -21,15 +21,15 @@ namespace Biluthyrning.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_AvailableCarsViewModel", x => x.Id);
+                    table.PrimaryKey("PK_AvailableCars", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_AvailableCarsViewModel_Bookings_BookingId",
+                        name: "FK_AvailableCars_Bookings_BookingId",
                         column: x => x.BookingId,
                         principalTable: "Bookings",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_AvailableCarsViewModel_Cars_CarId",
+                        name: "FK_AvailableCars_Cars_CarId",
                         column: x => x.CarId,
                         principalTable: "Cars",
                         principalColumn: "CarId",
@@ -37,13 +37,13 @@ namespace Biluthyrning.Migrations
                 });
 
             migrationBuilder.CreateIndex(
-                name: "IX_AvailableCarsViewModel_BookingId",
-                table: "AvailableCarsViewModel",
+                name: "IX_AvailableCars_BookingId",
+                table: "AvailableCars",
                 column: "BookingId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_AvailableCarsViewModel_CarId",
-                table: "AvailableCarsViewModel",
+                name: "IX_AvailableCars_CarId",
+                table: "AvailableCars",
                 column: "CarId");
         }
 
@@ -51,7 +51,7 @@ namespace Biluthyrning.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "AvailableCarsViewModel");
+                name: "AvailableCars");
         }
     }
 }
