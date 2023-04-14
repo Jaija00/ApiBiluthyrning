@@ -11,9 +11,9 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddDbContext<ApplicationDbContext>(options => options.UseSqlServer("Data Source=(localdb)\\MSSQLLocalDB;Initial Catalog=Biluthyrning;Integrated Security=True;Connect Timeout=30;Encrypt=False;TrustServerCertificate=False;ApplicationIntent=ReadWrite;MultiSubnetFailover=False"));
-builder.Services.AddTransient<ICar, CarRepository>();
-builder.Services.AddTransient<IUser, UserRepository>();
-builder.Services.AddTransient<IBooking, BookingRepository>();
+builder.Services.AddScoped<ICar, CarRepository>();
+builder.Services.AddScoped<IUser, UserRepository>();
+builder.Services.AddScoped<IBooking, BookingRepository>();
 
 var app = builder.Build();
 

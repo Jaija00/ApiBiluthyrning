@@ -1,45 +1,44 @@
-﻿using Biluthyrning.Models;
+﻿using Biluthyrning.Data;
+using Biluthyrning.Models;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
 namespace Biluthyrning.Data
 {
-	public class CarRepository : ICar
-	{
-		private readonly ApplicationDbContext applicationDbContext;
+    public class CarRepository : ICar
+    {
+        private readonly HttpClient client;
 
-		public CarRepository(ApplicationDbContext applicationDbContext)
-		{
-			this.applicationDbContext = applicationDbContext;
-		}
-		public async Task<Car> CreateAsync(Car car)
-		{
-			applicationDbContext.Cars.Add(car);
-			await applicationDbContext.SaveChangesAsync();
-			return car;
-		}
+        public CarRepository(HttpClient client)
+        {
+            this.client = client;
+        }
 
-		public async Task DeleteAsync(int id)
-		{
-			var car = applicationDbContext.Cars.Find(id);
-			applicationDbContext.Cars.Remove(car);
-			await applicationDbContext.SaveChangesAsync();
-		}
+        public async Task<Car> CreateAsync(Car car)
+        {
+            await client.PostAsJsonAsync($"api/Cars", car);
+            return car;
+        }
 
-		public async Task<IEnumerable<Car>> GetAllAsync()
-		{
-			return await applicationDbContext.Cars.OrderBy(c => c.Size).ThenBy(c => c.Gear).ToListAsync();
-		}
+        public async Task DeleteAsync(int id)
+        {
+            await client.DeleteAsync($"api/Cars/{id}");
+        }
 
-		public async Task<Car> GetByIdAsync(int id)
-		{
-			return await applicationDbContext.Cars.FirstOrDefaultAsync(c => c.CarId == id);
-		}
+        public async Task<IEnumerable<Car>> GetAllAsync()
+        {
+            return await client.GetFromJsonAsync<IEnumerable<Car>>("api/Cars");
+        }
 
-		public async Task<Car> UpdateAsync(Car car)
-		{
-			applicationDbContext.Update(car);
-			await applicationDbContext.SaveChangesAsync();
-			return car;
-		}
-	}
+        public async Task<Car> GetByIdAsync(int id)
+        {
+            return await client.GetFromJsonAsync<Car>($"api/Cars/{id}");
+        }
+
+        public async Task<Car> UpdateAsync(Car car)
+        {
+            await client.PutAsJsonAsync($"api/Cars/{car.CarId}", car);
+            return car;
+        }
+    }
 }

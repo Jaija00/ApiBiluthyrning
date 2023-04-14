@@ -5,40 +5,36 @@ namespace Biluthyrning.Data
 {
 	public class UserRepository : IUser
 	{
-		private readonly ApplicationDbContext applicationDbContext;
+        private readonly HttpClient client;
 
-		public UserRepository(ApplicationDbContext applicationDbContext)
+        public UserRepository(HttpClient client)
 		{
-			this.applicationDbContext = applicationDbContext;
-		}
+            this.client = client;
+        }
 		public async Task<User> CreateAsync(User user)
 		{
-			applicationDbContext.Users.Add(user);
-			await applicationDbContext.SaveChangesAsync();
+			await client.PostAsJsonAsync($"api/Users", user);
 			return user;
 		}
 
 		public async Task DeleteAsync(int id)
 		{
-			var user = applicationDbContext.Users.Find(id);
-			applicationDbContext.Users.Remove(user);
-			await applicationDbContext.SaveChangesAsync();
+			await client.DeleteAsync($"api/Users/{id}");
 		}
 
 		public async Task<IEnumerable<User>> GetAllAsync()
 		{
-			return await applicationDbContext.Users.OrderBy(x => x.FirstName).ToListAsync();
+			return await client.GetFromJsonAsync<IEnumerable<User>>($"api/Users");
 		}
 
 		public async Task<User> GetByIdAsync(int id)
 		{
-			return await applicationDbContext.Users.FirstOrDefaultAsync(x => x.UserId == id);
+			return await client.GetFromJsonAsync<User>($"api/Users/{id}");
 		}
 
 		public async Task<User> UpdateAsync(User user)
 		{
-			applicationDbContext.Update(user);
-			await applicationDbContext.SaveChangesAsync();
+			await client.PutAsJsonAsync<User>($"api/Users/{user.UserId}", user);
 			return user;
 		}
 	}
