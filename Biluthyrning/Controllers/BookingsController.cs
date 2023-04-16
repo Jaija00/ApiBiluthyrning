@@ -86,9 +86,16 @@ namespace Biluthyrning.Controllers
             {
                 var post = new AvailableCarsViewModel();
                 post.Car = c;
-                post.Booking = await bookingRepository.GetByCarIdAsync(c.CarId);
-                if (searchCarViewModel.Car == null && post.Booking != null)
+                try
                 {
+                post.Booking = await bookingRepository.GetByCarIdAsync(c.CarId);
+                }
+                catch(Exception ex)
+                {
+                post.Booking = null;
+                }
+                if (searchCarViewModel.Car == null && post.Booking != null)
+                { 
                     if ((searchCarViewModel.DatePicker.StartDate >= post.Booking.End && searchCarViewModel.DatePicker.EndDate >= post.Booking.End) ||
                          (searchCarViewModel.DatePicker.EndDate <= post.Booking.Start && searchCarViewModel.DatePicker.StartDate <= post.Booking.Start))
                     {
