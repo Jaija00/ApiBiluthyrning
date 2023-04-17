@@ -158,8 +158,7 @@ namespace Biluthyrning.Controllers
             {
                 if (ModelState.IsValid)
                 {
-                    var bookCar =
-                    await bookingRepository.GetByCarIdAsync(booking.CarId);
+                    var bookCar = await bookingRepository.GetByCarIdAsync(booking.CarId);
                     if (bookCar == null)
                     {
                         await bookingRepository.CreateAsync(booking);
