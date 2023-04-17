@@ -1,4 +1,5 @@
-﻿using System.ComponentModel;
+﻿using Biluthyrning.Models;
+using System.ComponentModel;
 
 namespace Biluthyrning.ViewModels
 {
@@ -26,9 +27,9 @@ namespace Biluthyrning.ViewModels
         public string LastName { get; set; } = "";
         public DateTime Start { get; set; }
         public DateTime End { get; set; }
+        public Booking Booking { get; set; }
 
-     
-      
+
     }
 }
     

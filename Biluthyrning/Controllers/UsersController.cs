@@ -82,6 +82,7 @@ namespace Biluthyrning.Controllers
             {
                 var c = new RentedCarsViewModel();
                 c.CarId = item.CarId;
+                c.Booking = await bookingRepository.GetByCarIdAsync(c.CarId);
                 var x=carRepository.GetByIdAsync(item.CarId).Result.Name;
                 c.Name = x;
                 c.Start = item.Start;

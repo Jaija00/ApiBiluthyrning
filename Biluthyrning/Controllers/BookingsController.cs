@@ -171,15 +171,14 @@ namespace Biluthyrning.Controllers
                         await bookingRepository.CreateAsync(booking);
                         return RedirectToAction(nameof(ConfirmedBooking));
                     }
-					 return View();
-				
-				}
-         
+                    return View();
+
+                }
             }
             catch
             {
-				
-			}
+                await bookingRepository.CreateAsync(booking);
+            }
             return View();
         }
 
