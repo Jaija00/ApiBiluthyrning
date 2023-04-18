@@ -154,6 +154,7 @@ namespace Biluthyrning.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("Id,CarId,UserId,Start,End")] Booking booking)
         {
+            booking.Id = 0;
             try
             {
                 if (ModelState.IsValid)
